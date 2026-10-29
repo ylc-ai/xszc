@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>从“手搓飞行滑板”看中国青年创新与新质生产力</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cyberDark: '#0B0F19',
+            cyberCard: '#131B2E',
+            cyberNeon: '#10B981', // 动力绿
+            cyberCyan: '#06B6D4',
+            cyberBlue: '#3B82F6',
+            cyberPurple: '#8B5CF6'
+          },
+          fontFamily: {
+            sans: ['Inter', 'PingFang SC', 'Microsoft YaHei', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* 渐变流光与科技网格背景 */
+    body {
+      background-color: #070B14;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.08) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(59, 130, 246, 0.08) 0px, transparent 50%),
+        radial-gradient(at 50% 50%, rgba(139, 92, 246, 0.05) 0px, transparent 60%);
+    }
+    .grid-bg {
+      background-size: 40px 40px;
+      background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    }
+    .slide-enter {
+      animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(16px) scale(0.99); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    /* 自定义发光徽标 */
+    .glow-neon {
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.25);
+    }
+    .glow-blue {
+      box-shadow: 0 0 25px rgba(59, 130, 246, 0.25);
+    }
+  </style>
+</head>
+<body class="text-slate-100 font-sans min-h-screen flex flex-col justify-between overflow-x-hidden select-none">
+
+  <!-- 顶部导航与展示控制条 -->
+  <header class="w-full bg-slate-900/80 backdrop-blur-md border-b border-slate-800 z-50 sticky top-0 px-4 md:px-8 py-3 flex items-center justify-between">
+    <div class="flex items-center space-x-3">
+      <span class="px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-semibold tracking-wider">
+        《形势与政策》课堂展示
+      </span>
+      <h1 class="text-sm md:text-base font-medium text-slate-300 hidden sm:inline-block truncate max-w-md">
+        从“手搓飞行滑板”看中国青年创新与新质生产力
+      </h1>
+    </div>
+
+    <!-- 演示工具控制组 -->
+    <div class="flex items-center space-x-3 md:space-x-4">
+      <!-- 15分钟展示计时器 -->
+      <div class="flex items-center space-x-2 bg-slate-800/80 px-3 py-1.5 rounded-lg border border-slate-700">
+        <i class="fa-regular fa-clock text-emerald-400 text-xs"></i>
+        <span id="timerDisplay" class="font-mono text-sm tracking-widest text-emerald-300 font-bold">15:00</span>
+        <button id="toggleTimerBtn" title="暂停/继续倒计时" class="text-slate-400 hover:text-white text-xs ml-1 transition">
+          <i id="timerIcon" class="fa-solid fa-play"></i>
+        </button>
+        <button id="resetTimerBtn" title="重置倒计时" class="text-slate-400 hover:text-white text-xs transition">
+          <i class="fa-solid fa-rotate-left"></i>
+        </button>
+      </div>
+
+      <!-- 演讲备注抽屉开关 -->
+      <button id="toggleNotesBtn" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-blue-600/20 border border-blue-500/40 text-blue-300 hover:bg-blue-600/30 transition text-xs font-medium">
+        <i class="fa-solid fa-note-sticky text-blue-400"></i>
+        <span class="hidden md:inline">演讲备注</span>
+      </button>
+
+      <!-- 全屏按钮 -->
+      <button id="fullscreenBtn" title="全屏演示" class="p-2 rounded-lg bg-slate-800 border border-slate-700 hover:bg-slate-700 text-slate-300 transition text-xs">
+        <i class="fa-solid fa-expand"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- 幻灯片进度条 -->
+  <div class="w-full bg-slate-800 h-1">
+    <div id="slideProgressBar" class="h-full bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-500 transition-all duration-300" style="width: 14.28%;"></div>
+  </div>
+
+  <!-- 核心展示主体区 (Slides Container) -->
+  <main class="flex-1 flex items-center justify-center p-4 md:p-8 max-w-7xl mx-auto w-full grid-bg">
+    
+    <!-- SLIDE 1: 封面（纯文字大气极简版） -->
+    <section class="slide w-full slide-enter" data-slide="1">
+      <div class="max-w-4xl mx-auto text-center py-12 md:py-20 space-y-8">
+        <!-- 主标题 -->
+        <h1 class="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight text-white leading-tight">
+          从草根发明到新质生产力：<br class="hidden sm:inline" />
+          <span class="bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent">
+            湖北巴东宋兴宇“滑板起飞”
+          </span>的现实启示
+        </h1>
+
+        <!-- 科技感细微分割线 -->
+        <div class="flex items-center justify-center space-x-3 opacity-60">
+          <div class="h-[1px] w-16 bg-gradient-to-r from-transparent to-emerald-400"></div>
+          <div class="w-1.5 h-1.5 rounded-full bg-cyan-400"></div>
+          <div class="h-[1px] w-16 bg-gradient-to-l from-transparent to-blue-400"></div>
+        </div>
+
+        <!-- 副标题 -->
+        <p class="text-slate-300 text-lg sm:text-2xl md:text-3xl leading-relaxed font-light max-w-3xl mx-auto">
+          —— 低空经济浪潮、青年创新突围与审慎包容监管的深层思考
+        </p>
+      </div>
+    </section>
+
+    <!-- SLIDE 2: 新闻纪实：大山里飞出的“科幻绿魔” -->
+    <section class="slide w-full hidden" data-slide="2">
+      <div class="max-w-5xl mx-auto">
+        <div class="flex items-center space-x-2 mb-3">
+          <span class="text-xs uppercase tracking-widest text-emerald-400 font-mono">CASE BACKGROUND / 新闻纪实</span>
+        </div>
+        <h2 class="text-2xl md:text-4xl font-bold text-white mb-6">
+          大山里飞出的“科幻绿魔”：飞越长江的惊艳与舆论自证
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- 核心高光数据卡 -->
+          <div class="bg-gradient-to-b from-slate-900 to-slate-900/60 border border-slate-800 rounded-2xl p-5 hover:border-emerald-500/50 transition">
+            <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mb-4">
+              <i class="fa-solid fa-water"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-white mb-2">横渡长江与峡谷穿行</h3>
+            <p class="text-slate-400 text-sm leading-relaxed">
+              2026年国庆期间，湖北恩施巴东县青年<span class="text-emerald-300 font-medium">宋兴宇</span>脚踏自主研制的飞行滑板，掠过巴东长江水面、穿行巴人河峡谷，如《蜘蛛侠》绿魔降临现实。
+            </p>
+          </div>
+
+          <div class="bg-gradient-to-b from-slate-900 to-slate-900/60 border border-slate-800 rounded-2xl p-5 hover:border-cyan-500/50 transition">
+            <div class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 mb-4">
+              <i class="fa-solid fa-gauge-high"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-white mb-2">硬核动力：300kg推力</h3>
+            <p class="text-slate-400 text-sm leading-relaxed">
+              搭载<span class="text-cyan-300 font-medium">10组大功率电动涵道螺旋桨</span>，整体推力突破300公斤，续航5-10分钟，最高时速超80km/h，实现全载人垂直起降与稳定飞控。
+            </p>
+          </div>
+
+          <div class="bg-gradient-to-b from-slate-900 to-slate-900/60 border border-slate-800 rounded-2xl p-5 hover:border-purple-500/50 transition">
+            <div class="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 mb-4">
+              <i class="fa-solid fa-bullhorn"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-white mb-2">舆论质疑与现场实飞</h3>
+            <p class="text-slate-400 text-sm leading-relaxed">
+              从“五毛特效、吊威亚”的网暴质疑，到受邀在媒体记者与专业团队面前<span class="text-purple-300 font-medium">公开试飞自证</span>，登上央视、湖北日报等主流媒体，引爆科技圈。
+            </p>
+          </div>
+        </div>
+
+        <!-- 补充细节展牌 -->
+        <div class="mt-6 bg-slate-900/70 border border-slate-800 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div class="flex items-center space-x-3 text-sm text-slate-300">
+            <i class="fa-solid fa-video text-emerald-400 text-base"></i>
+            <span>媒体评价：“这不是科幻电影镜头，而是一个来自大别山区普通青年的硬核机械梦。”</span>
+          </div>
+          <span class="px-3 py-1 bg-slate-800 rounded-lg text-xs font-mono text-slate-400 border border-slate-700">
+            时间线：2023预研 → 2024挫折 → 2026成熟
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 3: 泥泞中的极客：一个农家少年的硬核突围 -->
+    <section class="slide w-full hidden" data-slide="3">
+      <div class="max-w-5xl mx-auto">
+        <div class="flex items-center space-x-2 mb-3">
+          <span class="text-xs uppercase tracking-widest text-cyan-400 font-mono">GROWTH & RESILIENCE / 奋斗轨迹</span>
+        </div>
+        <h2 class="text-2xl md:text-4xl font-bold text-white mb-6">
+          泥泞中的极客：从废弃木工棚到“硬核人机工程”
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- 左侧：苦难与重压 -->
+          <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 relative overflow-hidden">
+            <div class="absolute -right-4 -bottom-4 text-slate-800/40 text-8xl font-black">01</div>
+            <h3 class="text-lg font-bold text-rose-400 flex items-center space-x-2 mb-4">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+              <span>现实困境与至暗时刻</span>
+            </h3>
+            <ul class="space-y-4 text-slate-300 text-sm">
+              <li class="flex items-start space-x-3">
+                <span class="w-1.5 h-1.5 rounded-full bg-rose-400 mt-2"></span>
+                <span><strong>逆境开局：</strong>早年辍学务工，做过修车工、焊工与电子厂流水线，但从未熄灭对机械与飞行的痴迷。</span>
+              </li>
+              <li class="flex items-start space-x-3">
+                <span class="w-1.5 h-1.5 rounded-full bg-rose-400 mt-2"></span>
+                <span><strong>240万债务重压：</strong>创业受挫欠下巨债，他没有逃避选择，而是在巴东老家废弃木工窝棚里，靠自学攻关边打工边偿还全部欠款。</span>
+              </li>
+              <li class="flex items-start space-x-3">
+                <span class="w-1.5 h-1.5 rounded-full bg-rose-400 mt-2"></span>
+                <span><strong>试飞炸机与火灾险情：</strong>第一代采用微型涡轮喷气发动机，遭遇空中失衡起火烧焦草地，几乎倾家荡产。</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- 右侧：数字化自学与AI赋能 -->
+          <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 relative overflow-hidden">
+            <div class="absolute -right-4 -bottom-4 text-slate-800/40 text-8xl font-black">02</div>
+            <h3 class="text-lg font-bold text-emerald-400 flex items-center space-x-2 mb-4">
+              <i class="fa-solid fa-microchip"></i>
+              <span>数字时代的草根工程师思维</span>
+            </h3>
+            <ul class="space-y-4 text-slate-300 text-sm">
+              <li class="flex items-start space-x-3">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-2"></span>
+                <span><strong>自学体系突破：</strong>利用B站、开源飞控社区与专业论文，从零啃下流体力学、单片机编程与碳纤维热压工艺。</span>
+              </li>
+              <li class="flex items-start space-x-3">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-2"></span>
+                <span><strong>AI模型辅助结构设计：</strong>放弃涡喷后，借助大模型辅助计算涵道电推多桨冗余配平算法与结构轻量化，全面转向电驱动。</span>
+              </li>
+              <li class="flex items-start space-x-3">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-2"></span>
+                <span><strong>手机+AI姿态捕捉训练：</strong>在无专业风洞与动作捕捉仓的情况下，用两台旧手机搭建简易视觉动捕，修正重心摆动。</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="mt-6 p-4 rounded-xl bg-gradient-to-r from-emerald-950/40 via-slate-900 to-blue-950/40 border border-slate-800 text-center text-sm text-slate-300">
+          💡 <span class="text-white font-medium">破除“唯学历论”：</span>宋兴宇的成功不仅是个人的胜利，更是中国完善的工业供应链基础与互联网普惠教育赋予普通青年的赋能奇迹。
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 4: 形策维度一：草根创新与“敢为人先”的青年担当 -->
+    <section class="slide w-full hidden" data-slide="4">
+      <div class="max-w-5xl mx-auto">
+        <div class="flex items-center space-x-2 mb-3">
+          <span class="text-xs uppercase tracking-widest text-emerald-400 font-mono">IDEOLOGICAL PERSPECTIVE / 形策维度一</span>
+        </div>
+        <h2 class="text-2xl md:text-4xl font-bold text-white mb-6">
+          青年担当：不被定义的中国青年与首创精神
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- 维度1 -->
+          <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between">
+            <div>
+              <div class="text-emerald-400 text-2xl mb-4 font-mono font-bold">01</div>
+              <h3 class="text-lg font-bold text-white mb-3">摆脱精神内耗的“行动派”</h3>
+              <p class="text-slate-400 text-sm leading-relaxed">
+                在当下部分青年深陷“学历焦虑”与“躺平/内卷”叙事时，宋兴宇用木工窝棚里的电焊火花证明：<strong>实干是击碎迷茫唯一的铁锤</strong>。敢想敢做，才是青年底色。
+              </p>
+            </div>
+            <div class="mt-6 pt-4 border-t border-slate-800/80 text-xs text-slate-500">
+              对应核心素养：知行合一 · 实践品格
+            </div>
+          </div>
+
+          <!-- 维度2 -->
+          <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between">
+            <div>
+              <div class="text-cyan-400 text-2xl mb-4 font-mono font-bold">02</div>
+              <h3 class="text-lg font-bold text-white mb-3">契约精神与道德厚度</h3>
+              <p class="text-slate-400 text-sm leading-relaxed">
+                面对240万债务没有成为“老赖”，而是踏实研发、艰苦还款。科技探索的野心背后，是<strong>顶天立地的做人操守与诚信担当</strong>，赋予了极客创新沉甸甸的道德底色。
+              </p>
+            </div>
+            <div class="mt-6 pt-4 border-t border-slate-800/80 text-xs text-slate-500">
+              对应核心素养：社会主义核心价值观 · 诚信
+            </div>
+          </div>
+
+          <!-- 维度3 -->
+          <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between">
+            <div>
+              <div class="text-blue-400 text-2xl mb-4 font-mono font-bold">03</div>
+              <h3 class="text-lg font-bold text-white mb-3">开源共享与泛在学习红利</h3>
+              <p class="text-slate-400 text-sm leading-relaxed">
+                他的知识来源于数字中国的普及、网民的答疑和开源社群。草根青年的破茧，折射出当代中国<strong>知识普惠化、工业供应链平民化</strong>的巨大时代红利。
+              </p>
+            </div>
+            <div class="mt-6 pt-4 border-t border-slate-800/80 text-xs text-slate-500">
+              对应核心素养：数字化生存 · 终身学习能力
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 border-l-4 border-emerald-500 bg-slate-900/60 p-4 rounded-r-xl text-slate-300 text-sm">
+          <p class="font-semibold text-emerald-400 mb-1">《新时代的中国青年》白皮书印证：</p>
+          “新时代的中国青年生逢盛世、共享机遇。青年的理想信念、精神状态、综合素质，是一个国家发展活力的重要体现，也是一个国家核心竞争力的重要因素。”
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 5: 形策维度二：新质生产力与低空经济（eVTOL）新蓝海 -->
+    <section class="slide w-full hidden" data-slide="5">
+      <div class="max-w-5xl mx-auto">
+        <div class="flex items-center space-x-2 mb-3">
+          <span class="text-xs uppercase tracking-widest text-blue-400 font-mono">STRATEGIC PERSPECTIVE / 形策维度二</span>
+        </div>
+        <h2 class="text-2xl md:text-4xl font-bold text-white mb-6">
+          新质生产力共振：草根奇思如何对接国家战略“低空经济”
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- 宏观国家战略布局 -->
+          <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6">
+            <h3 class="text-base font-bold text-blue-400 flex items-center space-x-2 mb-4">
+              <i class="fa-solid fa-landmark"></i>
+              <span>宏观战略部署（国家与产业视角）</span>
+            </h3>
+            
+            <div class="space-y-4 text-xs md:text-sm text-slate-300">
+              <div class="bg-slate-800/50 p-3.5 rounded-xl border border-slate-700/60">
+                <div class="font-semibold text-white mb-1">写入国务院《政府工作报告》：</div>
+                <p class="text-slate-400">明确将“低空经济”作为新兴产业和未来产业的重要增长引擎，加快推进低空空域管理改革与基础设施建设。</p>
+              </div>
+
+              <div class="bg-slate-800/50 p-3.5 rounded-xl border border-slate-700/60">
+                <div class="font-semibold text-white mb-1">eVTOL（电动垂直起降）产业爆发：</div>
+                <p class="text-slate-400">高能量密度锂电池、大扭矩永磁无刷电机、高精度飞控系统全面国产化，使个人载人飞行的硬件成本从数百万骤降至民用级。</p>
+              </div>
+
+              <div class="bg-slate-800/50 p-3.5 rounded-xl border border-slate-700/60">
+                <div class="font-semibold text-white mb-1">新质生产力的内涵契合：</div>
+                <p class="text-slate-400">绿色低碳（纯电驱）、颠覆性技术突破、高技术附加值，低空交通是典型的高科技、高效能特征领域。</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 民间科技与产业链协同 -->
+          <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6">
+            <h3 class="text-base font-bold text-cyan-400 flex items-center space-x-2 mb-4">
+              <i class="fa-solid fa-layer-group"></i>
+              <span>微观互哺：中国工业门类齐全的支撑力</span>
+            </h3>
+
+            <div class="space-y-4 text-xs md:text-sm text-slate-300">
+              <div class="flex items-start space-x-3">
+                <div class="p-2 rounded bg-cyan-500/10 text-cyan-400 text-xs font-mono">SUPPLY</div>
+                <div>
+                  <h4 class="font-semibold text-white">珠三角/长三角“航模级”供应链：</h4>
+                  <p class="text-slate-400 mt-1">宋兴宇能以几万元成本采购电机、ESC电调与碳纤维板，得益于中国是全球无人机供应链制造绝对霸主。</p>
+                </div>
+              </div>
+
+              <div class="flex items-start space-x-3">
+                <div class="p-2 rounded bg-emerald-500/10 text-emerald-400 text-xs font-mono">APPLY</div>
+                <div>
+                  <h4 class="font-semibold text-white">山地立体交通与应急救援场景：</h4>
+                  <p class="text-slate-400 mt-1">巴东县地处崇山峻岭，传统路网曲折。轻型载人滑板/单人飞行器在抢险搜救、电力巡线、地质监测具有巨大潜力。</p>
+                </div>
+              </div>
+
+              <div class="flex items-start space-x-3">
+                <div class="p-2 rounded bg-purple-500/10 text-purple-400 text-xs font-mono">CYCLE</div>
+                <div>
+                  <h4 class="font-semibold text-white">从“民间极客”到“专精特新”孵化：</h4>
+                  <p class="text-slate-400 mt-1">草根创新是源头活水，国家支持引导民间发明与高校科研院所、无人机龙头企业实现技术协同与专利转化。</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 text-center text-xs text-slate-400">
+          “没有强大的中国制造作为底座，再天才的‘绿魔滑板’也只能停留在图纸上。”
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 6: 思考与规范：热情奔赴与安全监管的平衡 -->
+    <section class="slide w-full hidden" data-slide="6">
+      <div class="max-w-5xl mx-auto">
+        <div class="flex items-center space-x-2 mb-3">
+          <span class="text-xs uppercase tracking-widest text-purple-400 font-mono">POLICY & REGULATION / 审辩思考</span>
+        </div>
+        <h2 class="text-2xl md:text-4xl font-bold text-white mb-6">
+          思考与规范：给民间科技创新装上“安全带与导航仪”
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-auto">
+          <!-- 法律规范 -->
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 hover:border-slate-700 transition flex flex-col justify-between">
+            <div>
+              <div class="text-amber-400 text-2xl mb-4"><i class="fa-solid fa-scale-balanced"></i></div>
+              <h3 class="text-lg font-bold text-white mb-3">低空飞行空域报备规范</h3>
+              <p class="text-slate-400 text-sm leading-relaxed">
+                严格执行《无人驾驶航空器飞行管理暂行条例》。载人飞行装置涉及生命安全与公共空域，<strong>不能任性“黑飞”</strong>，必须在特定测试空域按规报批。
+              </p>
+            </div>
+            <div class="mt-6 pt-3 border-t border-slate-800 text-xs text-slate-500 font-mono">法治红线 · 合规有序</div>
+          </div>
+
+          <!-- 包容审慎监管 -->
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 hover:border-slate-700 transition flex flex-col justify-between">
+            <div>
+              <div class="text-emerald-400 text-2xl mb-4"><i class="fa-solid fa-hands-holding-child"></i></div>
+              <h3 class="text-lg font-bold text-white mb-3">坚持“包容审慎”的监管温度</h3>
+              <p class="text-slate-400 text-sm leading-relaxed">
+                地方政府与监管部门不宜“一棍子打死”，应提供<strong>隔离试飞场地、辅导合规资质</strong>。巴东当地文旅与科技部门为宋兴宇协调安全试飞即是生动实践。
+              </p>
+            </div>
+            <div class="mt-6 pt-3 border-t border-slate-800 text-xs text-slate-500 font-mono">政策温度 · 呵护萌芽</div>
+          </div>
+
+          <!-- 成果转化与扶持 -->
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 hover:border-slate-700 transition flex flex-col justify-between">
+            <div>
+              <div class="text-cyan-400 text-2xl mb-4"><i class="fa-solid fa-rocket"></i></div>
+              <h3 class="text-lg font-bold text-white mb-3">建立民间创新“收编与赋能”渠道</h3>
+              <p class="text-slate-400 text-sm leading-relaxed">
+                针对民间野生科研“安全性高、野路子多”的痛点，引导航空学会、高校实验室介入，<strong>补齐人机工程安全性、冗余降落伞、适航认证短板</strong>。
+              </p>
+            </div>
+            <div class="mt-6 pt-3 border-t border-slate-800 text-xs text-slate-500 font-mono">产学协同 · 价值转化</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 7: 结语升华：青年如鹏，大有可为 -->
+    <section class="slide w-full hidden" data-slide="7">
+      <div class="max-w-4xl mx-auto text-center py-6">
+        <div class="inline-block p-4 rounded-3xl bg-slate-900 border border-emerald-500/30 glow-neon mb-6">
+          <i class="fa-solid fa-paper-plane text-4xl text-emerald-400 animate-pulse"></i>
+        </div>
+
+        <h2 class="text-3xl md:text-5xl font-black text-white mb-6">
+          青年如鹏，大有可为
+        </h2>
+
+        <p class="text-slate-300 text-base md:text-xl leading-relaxed max-w-2xl mx-auto mb-8 font-light">
+          巴东小伙宋兴宇踩着的不仅是一块电动滑板，<br class="hidden sm:inline"/>
+          更是中国青年在时代浪潮中对梦想的<strong>极致执着</strong>，<br class="hidden sm:inline"/>
+          是中国迈向制造强国与新质生产力蓝海的<strong>民间底气</strong>。
+        </p>
+
+        <!-- 总结提炼点 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-left max-w-3xl mx-auto mb-10">
+          <div class="p-4 bg-slate-900/60 border border-slate-800 rounded-xl">
+            <span class="text-emerald-400 font-bold text-xs uppercase tracking-wider block mb-1">To Youth / 青年态度</span>
+            <p class="text-slate-300 text-xs leading-relaxed">不拘泥于学历起跑线，在数字化红利中找到热爱并做到极致。</p>
+          </div>
+          <div class="p-4 bg-slate-900/60 border border-slate-800 rounded-xl">
+            <span class="text-cyan-400 font-bold text-xs uppercase tracking-wider block mb-1">To Industry / 产业自信</span>
+            <p class="text-slate-300 text-xs leading-relaxed">依托世界最全工业链条，将未来产业的定义权牢牢抓在中国人手里。</p>
+          </div>
+          <div class="p-4 bg-slate-900/60 border border-slate-800 rounded-xl">
+            <span class="text-purple-400 font-bold text-xs uppercase tracking-wider block mb-1">To Era / 时代担当</span>
+            <p class="text-slate-300 text-xs leading-relaxed">以实干筑牢中国式现代化根基，让科学探索之光在广袤国土闪烁。</p>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <p class="text-lg font-medium text-slate-200">感谢各位老师与同学的聆听！</p>
+          <p class="text-xs text-slate-500 font-mono">Q&A · 敬请批评指正</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 底部固定控制条与翻页导航 -->
+  <footer class="w-full bg-slate-900/80 backdrop-blur-md border-t border-slate-800 px-4 md:px-8 py-3 z-40 flex items-center justify-between">
+    <div class="flex items-center space-x-2">
+      <span class="text-xs text-slate-400 font-mono">
+        <span id="currentSlideIndex" class="text-emerald-400 font-bold text-sm">1</span> / <span id="totalSlidesCount">7</span>
+      </span>
+      <span class="text-slate-600 hidden md:inline">|</span>
+      <!-- 快速导航胶囊 -->
+      <div class="hidden lg:flex items-center space-x-1" id="navDotsContainer">
+        <!-- 动态生成小圆点 -->
+      </div>
+    </div>
+
+    <!-- 快捷键指南提示 -->
+    <div class="hidden md:flex items-center space-x-3 text-xs text-slate-500">
+      <span><kbd class="px-1.5 py-0.5 bg-slate-800 rounded border border-slate-700 text-slate-400">←</kbd> 上一页</span>
+      <span><kbd class="px-1.5 py-0.5 bg-slate-800 rounded border border-slate-700 text-slate-400">→</kbd> 下一页</span>
+      <span><kbd class="px-1.5 py-0.5 bg-slate-800 rounded border border-slate-700 text-slate-400">N</kbd> 讲稿备注</span>
+    </div>
+
+    <!-- 翻页控制按钮 -->
+    <div class="flex items-center space-x-2">
+      <button id="prevBtn" class="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed border border-slate-700 transition text-sm flex items-center space-x-1">
+        <i class="fa-solid fa-chevron-left text-xs"></i>
+        <span class="hidden sm:inline">上一页</span>
+      </button>
+      <button id="nextBtn" class="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white disabled:opacity-30 disabled:cursor-not-allowed transition text-sm font-medium flex items-center space-x-1 shadow-lg shadow-emerald-950">
+        <span class="hidden sm:inline">下一页</span>
+        <i class="fa-solid fa-chevron-right text-xs"></i>
+      </button>
+    </div>
+  </footer>
+
+  <!-- 可折叠的演讲人讲稿提示抽屉 (Speaker Notes Drawer) -->
+  <aside id="notesDrawer" class="fixed right-0 top-16 bottom-14 w-full sm:w-96 bg-slate-900/95 border-l border-slate-800 shadow-2xl p-6 z-50 transform translate-x-full transition-transform duration-300 ease-in-out backdrop-blur-xl flex flex-col justify-between overflow-y-auto">
+    <div>
+      <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-4">
+        <div class="flex items-center space-x-2 text-blue-400 font-bold text-sm">
+          <i class="fa-solid fa-microphone-lines"></i>
+          <span>演讲人随堂备忘讲稿</span>
+        </div>
+        <button id="closeNotesBtn" class="text-slate-400 hover:text-white p-1">
+          <i class="fa-solid fa-xmark text-base"></i>
+        </button>
+      </div>
+
+      <div class="text-xs text-slate-400 mb-2 font-mono" id="notesSlideIndicator">SLIDE 1 NOTES:</div>
+      <div id="notesContent" class="text-sm text-slate-200 leading-relaxed space-y-3 font-normal">
+        <!-- 随幻灯片同步更新的提示词 -->
+      </div>
+    </div>
+
+    <div class="pt-4 border-t border-slate-800 text-xs text-slate-500">
+      <p>💡 提示：15分钟建议时间控制在 2分/页，最后留1-2分钟总结与交流。</p>
+    </div>
+  </aside>
+
+  <!-- 演讲讲稿数据库 (对应各Slide的讲稿) -->
+  <script>
+    const speakerNotesData = {
+      1: `
+        <p><strong>【开场与破题 (建议耗时：1.5分钟)】</strong></p>
+        <p>尊敬的老师、亲爱的同学们：大家好！</p>
+        <p>大家小时候可能都在电影《蜘蛛侠》里见过那个脚踏飞行滑板、在曼哈顿摩天大楼间穿梭的“绿魔”。很多人以为这只是好莱坞的科幻特效，但在今年国庆期间，湖北巴东大山深处的长江江面上，一个26岁的农家小伙，真的把这块“飞行滑板”踩上了天！</p>
+        <p>今天，我们小组将以<strong>“巴东青年宋兴宇手搓飞行滑板”</strong>这一爆火的新闻事件为切入点，结合《形势与政策》课程要求，带大家探讨：<strong>在全面推进新质生产力与中国式现代化的今天，中国青年应当如何确立自己的创新担当？</strong></p>
+      `,
+      2: `
+        <p><strong>【新闻纪实与舆论反转 (建议耗时：2分钟)】</strong></p>
+        <p>首先看这个案例的事实全貌：宋兴宇在巴东长江及巴人河峡谷成功贴水飞行，视频发出后瞬间登上热搜。</p>
+        <p>但舆论的第一反应是什么？“假的吧？”“绝对是威亚或者AI换脸特效！”面对汹涌的质疑，宋兴宇没有打嘴仗，而是直接把湖北日报和央视记者请到了宜昌实地，当着长枪短炮现场穿戴装备、点火起飞，在大众注视下悬停并穿行！</p>
+        <p><strong>技术硬核度：</strong>10个大涵道电机，峰值推力超300公斤，完全靠人体下肢重心倾斜和手持油门协同操控。这种直接“用硬核现场打破成见”的姿态，彰显了新一代青年的自信与从容。</p>
+      `,
+      3: `
+        <p><strong>【苦难、韧性与技术突围 (建议耗时：2.5分钟)】</strong></p>
+        <p>很多人以为他是“富二代玩票”或者国家级研究所骨干，但其实他的真实履历令人肃然起敬：</p>
+        <p>他初中就早早涉足社会打工，曾因创业受挫背负240万元巨债。但他没有跑路，在巴东老家亲戚废弃的木工棚里，一边打工一边还钱，把破棚改造成实验室。</p>
+        <p>初期他用微型涡轮喷气发动机，但空中直接起火爆炸。跌入谷底后，他利用互联网开源技术和AI大模型重新计算空气动力，最终决定转向电驱动系统。更绝的是，没有专业昂贵的风洞设备，他就架设两台旧手机，用AI姿态捕捉算法辅助矫正自己的平衡姿态。<strong>这是典型的‘中国极客韧性’——在泥泞中仰望星空！</strong></p>
+      `,
+      4: `
+        <p><strong>【形策维度一：青年精神与新时代作为 (建议耗时：2.5分钟)】</strong></p>
+        <p>从思想政治与青年担当的角度来看，宋兴宇给我们大学生带来三点深刻警醒：</p>
+        <p>第一，<strong>破除行动瘫痪</strong>。当下象牙塔里不少同学面临考研就业压力，容易陷入精神内耗与‘躺平’诉求。宋兴宇用实际行动证明，动手能力与实干担当才是解决一切困境的密码。</p>
+        <p>第二，<strong>不被学历定义人生</strong>。学历固然重要，但终身学习与专注的热爱更能决定一个人的高度。</p>
+        <p>第三，<strong>诚信立身</strong>。240万债务如期还清，彰显了社会主义核心价值观中的首要底线——诚信。没有道德基石的技术狂热是没有灵魂的。</p>
+      `,
+      5: `
+        <p><strong>【形策维度二：国家低空经济与新质生产力 (建议耗时：3分钟)】</strong></p>
+        <p>请大家把视线从个人拉升到国家大局：宋兴宇的成功，背后靠的是什么？</p>
+        <p>是<strong>国家战略与中国完整工业门类</strong>的同频共振！二十届三中全会与国务院《政府工作报告》明确将‘低空经济’定义为新质生产力的新增长引擎。低空空域开发进入深水区。</p>
+        <p>宋兴宇能够‘手搓’飞行器，根本原因在于中国是全球唯一拥有全部工业门类的国家：高密度动力锂电池、大功率无刷电调、碳纤维复材在珠三角和长三角可以‘白菜价’网购包邮。没有中国强大的新能源车和无人机产业集群红利，个人极客根本不可能实现载人飞天梦！</p>
+      `,
+      6: `
+        <p><strong>【辩证思考：法治轨道与支持生态 (建议耗时：2分钟)】</strong></p>
+        <p>当然，我们在鼓励创新的同时，也必须保持理性审慎的思辨：</p>
+        <p>低空不是法外之地。今年颁布的《无人驾驶航空器飞行管理暂行条例》对个人载人装置提出了极高要求。载人飞行器一旦失控坠落，对地面人员和航道安全构成极大威胁，决不能提倡‘非法黑飞’。</p>
+        <p>这就给治理体系提出了新命题：政府监管部门不能因噎废食，要实施‘包容审慎’监管，为民间技术探索划定合规测试区；同时，呼吁高校科研院所与行业龙头搭建孵化平台，把这些野生天才‘纳编’，用正规工程学与适航认证为他们的梦想护航。</p>
+      `,
+      7: `
+        <p><strong>【总结升华与互动 (建议耗时：1.5分钟)】</strong></p>
+        <p>老师、同学们，回顾整场展示：巴东长江上的那道飞掠而过的身影，是当代中国大地充满生机与活力的缩影。</p>
+        <p>当一个大山深处的普通年轻人，能在简陋的木工棚里造出领先的飞行滑板；当我们的国家正在为每一个敢闯敢试的梦想搭建低空经济的万亿舞台——我们有理由相信，新时代的中国青年只要秉持创新与实干，就必将‘如鹏展翅，大有可为’！</p>
+        <p>我的汇报完毕，欢迎老师和大家提问探讨，谢谢！</p>
+      `
+    };
+
+    // 幻灯片状态管理
+    let currentSlide = 1;
+    const totalSlides = 7;
+    let timerSeconds = 15 * 60; // 15分钟
+    let timerInterval = null;
+    let isTimerRunning = false;
+
+    // DOM 元素获取
+    const slides = document.querySelectorAll('.slide');
+    const currentSlideIndexEl = document.getElementById('currentSlideIndex');
+    const totalSlidesCountEl = document.getElementById('totalSlidesCount');
+    const slideProgressBar = document.getElementById('slideProgressBar');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const navDotsContainer = document.getElementById('navDotsContainer');
+    
+    const notesDrawer = document.getElementById('notesDrawer');
+    const toggleNotesBtn = document.getElementById('toggleNotesBtn');
+    const closeNotesBtn = document.getElementById('closeNotesBtn');
+    const notesContent = document.getElementById('notesContent');
+    const notesSlideIndicator = document.getElementById('notesSlideIndicator');
+
+    const timerDisplay = document.getElementById('timerDisplay');
+    const toggleTimerBtn = document.getElementById('toggleTimerBtn');
+    const timerIcon = document.getElementById('timerIcon');
+    const resetTimerBtn = document.getElementById('resetTimerBtn');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+
+    // 初始化底部点位指示器
+    function initNavDots() {
+      navDotsContainer.innerHTML = '';
+      for (let i = 1; i <= totalSlides; i++) {
+        const dot = document.createElement('button');
+        dot.className = `w-2 h-2 rounded-full transition-all duration-300 ${i === currentSlide ? 'w-6 bg-emerald-400' : 'bg-slate-700 hover:bg-slate-500'}`;
+        dot.title = `跳转到第 ${i} 页`;
+        dot.addEventListener('click', () => goToSlide(i));
+        navDotsContainer.appendChild(dot);
+      }
+    }
+
+    // 更新幻灯片视图与内容
+    function updateSlideView() {
+      slides.forEach((slide) => {
+        const slideIndex = parseInt(slide.getAttribute('data-slide'));
+        if (slideIndex === currentSlide) {
+          slide.classList.remove('hidden');
+          slide.classList.add('slide-enter');
+        } else {
+          slide.classList.add('hidden');
+          slide.classList.remove('slide-enter');
+        }
+      });
+
+      // 更新页码及进度条
+      currentSlideIndexEl.textContent = currentSlide;
+      const progressPercent = (currentSlide / totalSlides) * 100;
+      slideProgressBar.style.width = `${progressPercent}%`;
+
+      // 禁用/启用按钮
+      prevBtn.disabled = currentSlide === 1;
+      nextBtn.disabled = currentSlide === totalSlides;
+
+      // 更新导航点
+      initNavDots();
+
+      // 更新讲稿提示
+      updateNotesView();
+    }
+
+    // 更新演讲备注提示
+    function updateNotesView() {
+      notesSlideIndicator.textContent = `SLIDE ${currentSlide} / ${totalSlides} 讲稿参考:`;
+      notesContent.innerHTML = speakerNotesData[currentSlide] || '<p>暂无备注</p>';
+    }
+
+    // 翻页操作
+    function goToSlide(index) {
+      if (index >= 1 && index <= totalSlides) {
+        currentSlide = index;
+        updateSlideView();
+      }
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) {
+        currentSlide++;
+        updateSlideView();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) {
+        currentSlide--;
+        updateSlideView();
+      }
+    }
+
+    // 15分钟展示计时器
+    function formatTime(sec) {
+      const m = Math.floor(sec / 60).toString().padStart(2, '0');
+      const s = (sec % 60).toString().padStart(2, '0');
+      return `${m}:${s}`;
+    }
+
+    function updateTimerUI() {
+      timerDisplay.textContent = formatTime(timerSeconds);
+      if (timerSeconds <= 120 && timerSeconds > 0) {
+        timerDisplay.classList.remove('text-emerald-300');
+        timerDisplay.classList.add('text-amber-400'); // 剩余两分钟黄标告警
+      } else if (timerSeconds === 0) {
+        timerDisplay.classList.remove('text-amber-400');
+        timerDisplay.classList.add('text-rose-500', 'animate-pulse');
+      } else {
+        timerDisplay.classList.add('text-emerald-300');
+        timerDisplay.classList.remove('text-amber-400', 'text-rose-500', 'animate-pulse');
+      }
+    }
+
+    function toggleTimer() {
+      if (isTimerRunning) {
+        clearInterval(timerInterval);
+        isTimerRunning = false;
+        timerIcon.className = 'fa-solid fa-play';
+      } else {
+        if (timerSeconds <= 0) timerSeconds = 15 * 60;
+        timerInterval = setInterval(() => {
+          if (timerSeconds > 0) {
+            timerSeconds--;
+            updateTimerUI();
+          } else {
+            clearInterval(timerInterval);
+            isTimerRunning = false;
+            timerIcon.className = 'fa-solid fa-play';
+          }
+        }, 1000);
+        isTimerRunning = true;
+        timerIcon.className = 'fa-solid fa-pause';
+      }
+    }
+
+    function resetTimer() {
+      clearInterval(timerInterval);
+      isTimerRunning = false;
+      timerSeconds = 15 * 60;
+      timerIcon.className = 'fa-solid fa-play';
+      updateTimerUI();
+    }
+
+    // 备注抽屉开关
+    function toggleNotes() {
+      notesDrawer.classList.toggle('translate-x-full');
+    }
+
+    // 全屏模式控制
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.log(`全屏请求异常: ${err.message}`);
+        });
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
+    // 键盘快捷键监听
+    document.addEventListener('keydown', (e) => {
+      // 避免输入框冲突
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+      if (e.key === 'ArrowRight' || e.key === 'Space' || e.key === 'PageDown') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key.toLowerCase() === 'n') {
+        e.preventDefault();
+        toggleNotes();
+      } else if (e.key.toLowerCase() === 'f') {
+        e.preventDefault();
+        toggleFullScreen();
+      }
+    });
+
+    // 事件绑定
+    prevBtn.addEventListener('click', prevSlide);
+    nextBtn.addEventListener('click', nextSlide);
+    toggleNotesBtn.addEventListener('click', toggleNotes);
+    closeNotesBtn.addEventListener('click', toggleNotes);
+    toggleTimerBtn.addEventListener('click', toggleTimer);
+    resetTimerBtn.addEventListener('click', resetTimer);
+    fullscreenBtn.addEventListener('click', toggleFullScreen);
+
+    // 启动初始化
+    window.addEventListener('DOMContentLoaded', () => {
+      updateSlideView();
+      updateTimerUI();
+    });
+  </script>
+</body>
+</html>
